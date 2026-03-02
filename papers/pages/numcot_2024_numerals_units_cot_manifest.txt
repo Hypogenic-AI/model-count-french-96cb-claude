@@ -1,0 +1,11 @@
+PDF: papers/numcot_2024_numerals_units_cot.pdf
+Total pages: 17
+Pages per chunk: 3
+
+Chunks:
+  numcot_2024_numerals_units_cot_chunk_001.pdf: pages 1-3
+  numcot_2024_numerals_units_cot_chunk_002.pdf: pages 4-6
+  numcot_2024_numerals_units_cot_chunk_003.pdf: pages 7-9
+  numcot_2024_numerals_units_cot_chunk_004.pdf: pages 10-12
+  numcot_2024_numerals_units_cot_chunk_005.pdf: pages 13-15
+  numcot_2024_numerals_units_cot_chunk_006.pdf: pages 16-17

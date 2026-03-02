@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/model-count-french-96cb-claude/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/model-count-french-96cb-claude/literature_review.md",
+        "resources_catalog": "/workspaces/model-count-french-96cb-claude/resources.md",
+        "papers_dir": "/workspaces/model-count-french-96cb-claude/papers",
+        "datasets_dir": "/workspaces/model-count-french-96cb-claude/datasets",
+        "code_dir": "/workspaces/model-count-french-96cb-claude/code"
+      },
+      "log_file": "/workspaces/model-count-french-96cb-claude/logs/resource_finder_claude.log",
+      "transcript_file": "/workspaces/model-count-french-96cb-claude/logs/resource_finder_claude_transcript.jsonl",
+      "elapsed_time": 1397.6058926582336
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 1594.6680130958557,
+      "log_file": "/workspaces/model-count-french-96cb-claude/logs/execution_claude.log",
+      "transcript_file": "/workspaces/model-count-french-96cb-claude/logs/execution_claude_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/model-count-french-96cb-claude"
+}

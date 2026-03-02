@@ -1,0 +1,65 @@
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Overview}
+
+We extract hidden-state representations from \mistral v0.1 \citep{jiang2023mistral} for numbers 0--999 presented in four surface formats, then train circular digit probes to recover base-10 digit values from these representations. By comparing probe accuracy across formats, layers, and number ranges, we map how the model internally represents French numbers and whether the vigesimal structure degrades these representations.
+
+\subsection{Input Formats}
+\label{sec:formats}
+
+For each integer $n \in \{0, 1, \ldots, 999\}$, we construct four input sentences:
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=2pt]
+    \item \textbf{\digits}: ``The number is $n$.'' (\eg ``The number is 98.'')
+    \item \textbf{\english}: ``The number is \textit{english}($n$).'' (\eg ``The number is ninety-eight.'')
+    \item \textbf{\francefr}: ``Le nombre est \textit{french}($n$).'' (\eg ``Le nombre est quatre-vingt-dix-huit.'')
+    \item \textbf{\belgianfr}: ``Le nombre est \textit{belgian}($n$).'' (\eg ``Le nombre est nonante-huit.'')
+\end{enumerate}
+
+The France French format uses the standard vigesimal system for 70--99: \emph{soixante-dix} (60+10) for 70, \emph{quatre-vingts} ($4\times20$) for 80, and \emph{quatre-vingt-dix} ($4\times20+10$) for 90. The Belgian French format replaces these with decimal equivalents: \emph{septante} (70), \emph{huitante} (80), \emph{nonante} (90). Numbers 0--69 are identical across both French variants.
+
+\subsection{Representation Extraction}
+
+We load \mistral in float16 precision on a single NVIDIA RTX A6000 GPU. For each input sentence, we perform a forward pass and extract the hidden-state vector $\vh_n^{(\ell)} \in \sR^{4096}$ at the \emph{last token position} for each layer $\ell \in \{0, 1, \ldots, 32\}$ (embedding layer plus 32 transformer layers). We use the last token because it aggregates information from the full input via causal attention, following the convention of \citet{levy2024language}.
+
+\subsection{Circular Digit Probes}
+\label{sec:probes}
+
+We adopt the circular probing framework of \citet{levy2024language}. Each integer $n$ can be decomposed into three base-10 digits: hundreds ($d_h$), tens ($d_t$), and units ($d_u$), where $n = 100 d_h + 10 d_t + d_u$. For each digit $d \in \{0, 1, \ldots, 9\}$, we define a circular target:
+\begin{equation}
+    \text{circle}(d) = \left[\cos\!\left(\frac{2\pi d}{10}\right),\; \sin\!\left(\frac{2\pi d}{10}\right)\right].
+    \label{eq:circle}
+\end{equation}
+The full target vector for number $n$ is the concatenation $\vy_n = [\text{circle}(d_h);\; \text{circle}(d_t);\; \text{circle}(d_u)] \in \sR^6$.
+
+The probe is a linear map $\mW \in \sR^{6 \times 4096}$ with bias $\vb \in \sR^6$, trained to minimize the mean squared error:
+\begin{equation}
+    \gL = \frac{1}{|\train|} \sum_{n \in \train} \left\| \mW \vh_n^{(\ell)} + \vb - \vy_n \right\|^2.
+    \label{eq:loss}
+\end{equation}
+
+We train one probe per layer per format using Adam \citep{kingma2015adam} with learning rate $5 \times 10^{-4}$, weight decay $10^{-5}$, batch size 128, for 500 epochs. At inference, we predict each digit by computing the angle of the probe output and rounding:
+\begin{equation}
+    \hat{d} = \left\lfloor \frac{10}{2\pi} \cdot \text{atan2}(\hat{s}, \hat{c}) \right\rceil \mod 10,
+    \label{eq:predict}
+\end{equation}
+where $(\hat{c}, \hat{s})$ are the predicted cosine and sine components and $\lfloor \cdot \rceil$ denotes rounding to the nearest integer.
+
+\subsection{Train/Test Split}
+
+We use a stratified random split with 80\% train (800 numbers) and 20\% test (200 numbers), stratified by hundreds digit to ensure equal representation from each block (0--99, 100--199, $\ldots$, 900--999). The test set contains 60 vigesimal numbers (30\%) and 140 decimal numbers (70\%), reflecting the natural distribution. We use a fixed random seed (42) for reproducibility.
+
+\subsection{Evaluation}
+
+\para{Overall accuracy.} A number is correctly predicted only if all three digits (hundreds, tens, units) match the ground truth simultaneously.
+
+\para{Per-digit accuracy.} We report accuracy for each digit position (hundreds, tens, units) separately.
+
+\para{Vigesimal vs.\ decimal accuracy.} We stratify results by whether the number's last two digits fall in the vigesimal range (70--99) or the decimal range (0--69).
+
+\para{Layer-wise analysis.} We train probes at each of the 33 layers and report accuracy curves to identify where numeric representations emerge.
+
+\para{Sensitivity analysis.} We repeat training with 5 random seeds (42, 123, 456, 789, 1024) at the best layer for each format and report mean $\pm$ standard deviation.
+
+\para{Statistical tests.} We use McNemar's test for paired format comparisons on the same test numbers and Fisher's exact test for vigesimal versus decimal accuracy within a format.

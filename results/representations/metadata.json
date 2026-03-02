@@ -1,0 +1,19 @@
+{
+  "model": "mistralai/Mistral-7B-v0.1",
+  "num_numbers": 1000,
+  "num_layers": 33,
+  "hidden_dim": 4096,
+  "formats": [
+    "digits",
+    "english",
+    "french",
+    "belgian"
+  ],
+  "seed": 42,
+  "prompt_templates": {
+    "digits": "The number is {n}.",
+    "english": "The number is {english(n)}.",
+    "french": "Le nombre est {french(n)}.",
+    "belgian": "Le nombre est {belgian(n)}."
+  }
+}

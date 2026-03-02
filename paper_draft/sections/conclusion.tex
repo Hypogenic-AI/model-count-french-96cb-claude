@@ -1,0 +1,8 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We investigated how \mistral internally represents French numbers, with a focus on the vigesimal counting system used for numbers 70--99. Using circular digit probes across four input formats, we found that French number word representations encode base-10 digits at 98.0\% accuracy---comparable to English and significantly higher than digit strings. The vigesimal structure leaves localized fingerprints: errors on the \emph{soixante-dix} (70s) range reveal partial encoding of the arithmetic decomposition (``soixante'' $\to$ 60 rather than the composed value 70+). Most strikingly, number word representations peak at early layers (5--6), while digit string representations peak at the final layer (31), suggesting distinct processing pathways for semantic and tokenized numerical inputs.
+
+Our work demonstrates that distributional learning is sufficient to capture the implicit arithmetic of complex counting systems. The French vigesimal system---where 98 is encoded as $4\times20+10+8$ in the surface form---does not prevent the model from building clean base-10 digit representations.
+
+Several directions remain open. Testing additional models (multilingual LLMs, models at different scales) would establish generality. Causal interventions could confirm that these representations are functionally used. Token-by-token analysis of compound vigesimal words could trace how arithmetic composition unfolds across the input. Finally, extending this analysis to other complex counting systems---Danish (\emph{halvfjerds} = ``half-fourth-times-twenty'' for 70), traditional Japanese, or Basque---would further illuminate the relationship between linguistic structure and internal numeric representations.

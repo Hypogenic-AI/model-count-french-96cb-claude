@@ -1,0 +1,30 @@
+{
+  "digits": [
+    "The number is 0.",
+    "The number is 1.",
+    "The number is 2.",
+    "The number is 3.",
+    "The number is 4."
+  ],
+  "english": [
+    "The number is zero.",
+    "The number is one.",
+    "The number is two.",
+    "The number is three.",
+    "The number is four."
+  ],
+  "french": [
+    "Le nombre est zéro.",
+    "Le nombre est un.",
+    "Le nombre est deux.",
+    "Le nombre est trois.",
+    "Le nombre est quatre."
+  ],
+  "belgian": [
+    "Le nombre est zéro.",
+    "Le nombre est un.",
+    "Le nombre est deux.",
+    "Le nombre est trois.",
+    "Le nombre est quatre."
+  ]
+}

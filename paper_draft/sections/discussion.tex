@@ -1,0 +1,30 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpreting the Results}
+
+\para{The model has learned vigesimal arithmetic.}
+Our central finding is that \mistral successfully decomposes French vigesimal number words into base-10 digit representations at 98.0\% accuracy. When the model processes ``quatre-vingt-dix-huit'' ($4\times20+10+8$), it arrives at an internal representation from which we can recover the digits $[0, 9, 8]$---the same digits we recover from ``ninety-eight'' or the string ``98.'' This demonstrates that distributional learning on text corpora is sufficient to capture the implicit arithmetic of the French counting system.
+
+\para{Why do word forms outperform digit strings?}
+The fact that all three word-form formats (98.0--99.0\%) significantly outperform digit strings (91.0\%) is initially surprising. We hypothesize two contributing factors. First, the layer dynamics differ: word-form representations crystallize at early layers (5--6), while digit-string representations only peak at layer 31. The probes trained at the best layer for digit strings may be operating on representations that are still being actively transformed by the final layers, making them harder to decode linearly. Second, digit tokens may be used for diverse purposes beyond pure numeric representation (code, dates, identifiers), creating a more distributed and context-dependent encoding, while number words more consistently signal numeric meaning.
+
+\para{The early-vs-late layer phenomenon.}
+The divergence in peak layers between word-form (layers 5--6) and digit-string (layer 31) representations is our most striking finding. This pattern is consistent across all three word-form conditions, ruling out language-specific explanations. We propose that number words activate the model's semantic processing pathway early in the network---the model ``knows'' what number a word represents almost immediately---while digit tokens are processed more symbolically, with their numeric meaning emerging only after extensive computation. This aligns with \citet{kisako2025representational}, who found that arithmetic and language representations occupy separate regions in LLM representation space.
+
+\para{The soixante-dix fingerprint.}
+The error pattern on 73 and 76 (predicted as 63 and 66) provides a direct window into the model's compositional processing. Rather than treating ``soixante-treize'' as an opaque lexical item mapping to 73, the model's representation partially reflects the arithmetic decomposition: ``soixante'' $\to$ 60, ``treize'' $\to$ 13. The probe recovers the tens digit as 6 (from ``soixante'') rather than 7 (from $60+13=73$). This suggests the representation encodes a superposition of the compositional structure and the final value, with the compositional signal occasionally dominating.
+
+\subsection{Limitations}
+
+\para{Single model.} We evaluate only \mistral v0.1. Different models---particularly multilingual models like BLOOM or CroissantLLM, or models with different tokenizers---may show different patterns. The early-vs-late layer finding should be validated across architectures.
+
+\para{Small vigesimal test set.} Our test set contains only 17--22 numbers per vigesimal sub-range (70--79, 80--89, 90--99), limiting statistical power for sub-range comparisons. The difference between vigesimal (96.7\%) and decimal (98.6\%) accuracy is not statistically significant.
+
+\para{Linear probes.} Circular probes are linear, which may underestimate the information available in hidden representations if the encoding is non-linear. MLP probes could potentially achieve higher accuracy but at the cost of interpretability.
+
+\para{Last-token extraction.} We extract representations at the last token position, which may miss information encoded at earlier positions within compound French words. Token-by-token analysis of how arithmetic composition unfolds across the word ``quatre-vingt-dix-huit'' could reveal additional structure.
+
+\para{Template sensitivity.} We use a single declarative template per language. Different prompts (\eg questions, arithmetic contexts) may elicit different representations.
+
+\para{Probing limitations.} Probing accuracy demonstrates that information is \emph{linearly decodable} from representations, not that the model \emph{uses} this information in its computations \citep{belinkov2022probing}. The causal interventions of \citet{levy2024language} provide evidence for functional relevance, but we do not perform interventions in this work.

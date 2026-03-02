@@ -1,0 +1,98 @@
+{
+  "best_results": {
+    "digits": {
+      "best_layer": 31,
+      "best_acc": 0.9099999666213989
+    },
+    "english": {
+      "best_layer": 8,
+      "best_acc": 0.98499995470047
+    },
+    "french": {
+      "best_layer": 6,
+      "best_acc": 0.9799999594688416
+    },
+    "belgian": {
+      "best_layer": 6,
+      "best_acc": 0.9899999499320984
+    }
+  },
+  "vigesimal_decimal": {
+    "digits": {
+      "vigesimal_acc": 0.9333333333333333,
+      "decimal_acc": 0.9,
+      "overall_acc": 0.91,
+      "n_vigesimal": 60,
+      "n_decimal": 140
+    },
+    "english": {
+      "vigesimal_acc": 1.0,
+      "decimal_acc": 0.9785714285714285,
+      "overall_acc": 0.985,
+      "n_vigesimal": 60,
+      "n_decimal": 140
+    },
+    "french": {
+      "vigesimal_acc": 0.9666666666666667,
+      "decimal_acc": 0.9857142857142858,
+      "overall_acc": 0.98,
+      "n_vigesimal": 60,
+      "n_decimal": 140
+    },
+    "belgian": {
+      "vigesimal_acc": 1.0,
+      "decimal_acc": 0.9857142857142858,
+      "overall_acc": 0.99,
+      "n_vigesimal": 60,
+      "n_decimal": 140
+    }
+  },
+  "statistical_tests": {
+    "mcnemar_french_vs_belgian": {
+      "statistic": 0.25,
+      "p_value": 0.6170750774519739,
+      "french_right_belgian_wrong": 1,
+      "french_wrong_belgian_right": 3
+    },
+    "mcnemar_french_vs_english": {
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "french_right_english_wrong": 2,
+      "french_wrong_english_right": 3
+    },
+    "mcnemar_french_vs_digits": {
+      "statistic": 9.38888888888889,
+      "p_value": 0.002183044737362194,
+      "french_right_digits_wrong": 16,
+      "french_wrong_digits_right": 2
+    },
+    "fisher_vigesimal_vs_decimal_french": {
+      "odds_ratio": 0.42028985507246375,
+      "p_value": 0.5848369674862546,
+      "vigesimal_acc": 0.9666666666666667,
+      "decimal_acc": 0.9857142857142858
+    }
+  },
+  "bootstrap_ci": {
+    "digits": {
+      "mean": 0.91,
+      "ci_low": 0.87,
+      "ci_high": 0.945
+    },
+    "english": {
+      "mean": 0.985,
+      "ci_low": 0.965,
+      "ci_high": 1.0
+    },
+    "french": {
+      "mean": 0.98,
+      "ci_low": 0.9598749999999999,
+      "ci_high": 0.9951249999999999
+    },
+    "belgian": {
+      "mean": 0.99,
+      "ci_low": 0.975,
+      "ci_high": 1.0
+    }
+  }
+}
